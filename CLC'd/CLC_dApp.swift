@@ -8,10 +8,14 @@
 import SwiftUI
 
 @main
-struct CLC_dApp: App {
+struct LeetCodeAlarmClockApp: App {
+    @StateObject var alarmViewModel = AlarmViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AlarmListView()
+                .environmentObject(alarmViewModel)
         }
     }
 }
+ 
