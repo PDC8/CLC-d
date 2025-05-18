@@ -12,11 +12,13 @@ class Alarm: ObservableObject, Identifiable {
     var time: Date
     var label: String
     @Published var isOn: Bool
+    @Published var isTriggered: Bool
     
-    init(time: Date, label: String, isOn: Bool = true) {
+    init(time: Date, label: String, isOn: Bool = true, isTriggered: Bool = false) {
         self.time = time
         self.label = label
         self.isOn = isOn
+        self.isTriggered = isTriggered
     }
 }
 

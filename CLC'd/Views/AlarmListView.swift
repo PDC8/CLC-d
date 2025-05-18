@@ -14,17 +14,8 @@ struct AlarmListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach($viewModel.alarms) { $alarm in
-                    HStack(){
-                        VStack(alignment: .leading) {
-                            Text(alarm.time.formatted(date: .omitted, time: .shortened))
-                            Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
-                                .foregroundColor(.gray)
-                        }
-                        Spacer()
-                        Toggle("", isOn: $alarm.isOn)
-                                        .labelsHidden()
-                    }
+                ForEach(viewModel.alarms) { alarm in
+                    AlarmRow(alarm: alarm)
                 }
                 .onDelete(perform: viewModel.removeAlarm)
             }
@@ -39,9 +30,32 @@ struct AlarmListView: View {
             .sheet(isPresented: $showingAddAlarm) {
                 AddAlarmView()
             }
+            
+            .sheet(item: $viewModel.activeAlarm) { alarm in
+                AlarmRingingView()
+                .onDisappear {
+                    alarm.isTriggered = false
+                    viewModel.activeAlarm = nil
+                    alarm.isOn = false
+                }
+            }
         }
     }
 }
-#Preview {
-    AlarmListView()
+
+struct AlarmRow: View {
+    @ObservedObject var alarm: Alarm
+    
+    var body: some View {
+        HStack {
+            VStack(alignment: .leading) {
+                Text(alarm.time.formatted(date: .omitted, time: .shortened))
+                Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
+                    .foregroundColor(.gray)
+            }
+            Spacer()
+            Toggle("", isOn: $alarm.isOn)
+                .labelsHidden()
+        }
+    }
 }
