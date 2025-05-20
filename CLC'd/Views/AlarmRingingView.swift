@@ -7,6 +7,7 @@
 import SwiftUI
 
 struct AlarmRingingView: View {
+    @EnvironmentObject var viewModel: AlarmViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -16,21 +17,30 @@ struct AlarmRingingView: View {
             
             // Submit button
             Button("Submit") {
-                // Check if answer matches "esrever" (reverse backwards)
-//                if solution.lowercased() == "esrever" {
-//                    AudioManager.shared.stopSound() // Stop alarm
-//                    dismiss() // Close view
-//                }
-                AudioManager.shared.stopSound() // Stop alarm
-                
-                dismiss() // Close view
+                checkSubmission()
             }
             .buttonStyle(.borderedProminent)
         }
         .padding()
         .interactiveDismissDisabled()
     }
+    
+    private func checkSubmission() {
+        guard let alarm = viewModel.activeAlarm else { return }
+        
+        viewModel.checkLatestSubmission(username: "peidongchen2004", alarmTime: alarm.time){ [weak viewModel] success in
+            if success {
+                AudioManager.shared.stopSound()
+                viewModel?.activeAlarm = nil
+                dismiss()
+            } else {
+                print("Not valid")
+            }
+        }
+    }
+
 }
+
 
 #Preview {
     AlarmRingingView()

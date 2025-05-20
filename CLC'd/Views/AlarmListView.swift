@@ -33,11 +33,11 @@ struct AlarmListView: View {
             
             .sheet(item: $viewModel.activeAlarm) { alarm in
                 AlarmRingingView()
-                .onDisappear {
-                    alarm.isTriggered = false
-                    viewModel.activeAlarm = nil
-                    alarm.isOn = false
-                }
+//                .onDisappear {
+//                    alarm.isTriggered = false
+//                    viewModel.activeAlarm = nil
+//                    alarm.isOn = false
+//                }
             }
         }
     }
