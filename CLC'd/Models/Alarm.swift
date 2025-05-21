@@ -11,16 +11,19 @@ class Alarm: ObservableObject, Identifiable {
     let id = UUID()
     var time: Date
     var label: String
-    var problemType: String
+    var problemType: ProblemType
+    @Published var title: String
     @Published var isOn: Bool
     @Published var isTriggered: Bool
     
-    init(time: Date, label: String, problemType: String, isOn: Bool = true, isTriggered: Bool = false) {
+    init(time: Date, label: String, problemType: ProblemType, isOn: Bool = true,
+         isTriggered: Bool = false, title: String = "") {
         self.time = time
         self.label = label
         self.isOn = isOn
         self.isTriggered = isTriggered
         self.problemType = problemType
+        self.title = title
     }
 }
 

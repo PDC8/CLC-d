@@ -12,10 +12,12 @@ struct AlarmRingingView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            // Alarm header
+            if let title = viewModel.activeAlarm?.title {
+                Text("Solve: \(title)")
+                    .font(.headline)
+                    .padding()
+            }
             Text("🔔 Alarm! Solve to dismiss").font(.title)
-            
-            // Submit button
             Button("Submit") {
                 checkSubmission()
             }

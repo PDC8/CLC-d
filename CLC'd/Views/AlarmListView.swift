@@ -31,13 +31,23 @@ struct AlarmListView: View {
                 AddAlarmView()
             }
             
-            .sheet(item: $viewModel.activeAlarm) { alarm in
+            .sheet(
+                item: Binding<Alarm?>(
+                    get: {
+                        guard let alarm = viewModel.activeAlarm,
+                              !alarm.title.isEmpty else { return nil }
+                        return alarm
+                    },
+                    set: { newValue in
+                        if newValue == nil {
+                            viewModel.activeAlarm?.isTriggered = false
+                            viewModel.activeAlarm?.isOn = false
+                            viewModel.activeAlarm = nil
+                        }
+                    }
+                )
+            ) { alarm in
                 AlarmRingingView()
-//                .onDisappear {
-//                    alarm.isTriggered = false
-//                    viewModel.activeAlarm = nil
-//                    alarm.isOn = false
-//                }
             }
         }
     }
@@ -50,6 +60,9 @@ struct AlarmRow: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(alarm.time.formatted(date: .omitted, time: .shortened))
+                Text(alarm.problemType.rawValue)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
                 Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
                     .foregroundColor(.gray)
             }

@@ -11,15 +11,15 @@ struct AddAlarmView: View {
     @EnvironmentObject var viewModel: AlarmViewModel
     @Environment(\.dismiss) var dismiss
     
-    enum ProblemType: String, CaseIterable, Identifiable {
-        case daily = "Daily"
-        case easy = "Easy"
-        case medium = "Medium"
-        case hard = "Hard"
-        case random = "Random"
-        
-        var id: String { self.rawValue }
-    }
+//    enum ProblemType: String, CaseIterable, Identifiable {
+//        case daily = "Daily"
+//        case easy = "Easy"
+//        case medium = "Medium"
+//        case hard = "Hard"
+//        case random = "Random"
+//        
+//        var id: String { self.rawValue }
+//    }
     @State private var selectedTime = Date()
     @State private var selectedProblemType = ProblemType.daily
     @State private var label = ""
@@ -39,7 +39,7 @@ struct AddAlarmView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        viewModel.addAlarm(time: selectedTime, label: label, problemType: selectedProblemType.rawValue)
+                        viewModel.addAlarm(time: selectedTime, label: label, problemType: selectedProblemType)
                         dismiss()
                     }
                 }
