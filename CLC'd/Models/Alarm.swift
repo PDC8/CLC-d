@@ -9,16 +9,18 @@ import Foundation
 
 class Alarm: ObservableObject, Identifiable {
     let id = UUID()
-    var time: Date
+    var hour: Int
+    var minute: Int
     var label: String
     var problemType: ProblemType
     @Published var title: String
     @Published var isOn: Bool
     @Published var isTriggered: Bool
     
-    init(time: Date, label: String, problemType: ProblemType, isOn: Bool = true,
+    init(hour: Int, minute: Int, label: String, problemType: ProblemType, isOn: Bool = true,
          isTriggered: Bool = false, title: String = "") {
-        self.time = time
+        self.hour = hour
+        self.minute = minute
         self.label = label
         self.isOn = isOn
         self.isTriggered = isTriggered

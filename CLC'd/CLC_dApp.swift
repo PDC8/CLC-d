@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct LeetCodeAlarmClockApp: App {
     @StateObject var alarmViewModel = AlarmViewModel()
+    @StateObject var userViewModel = UserViewModel()
     
     init() {
        NotificationManager.requestPermission()
@@ -19,6 +20,7 @@ struct LeetCodeAlarmClockApp: App {
         WindowGroup {
             AlarmListView()
                 .environmentObject(alarmViewModel)
+                .environmentObject(userViewModel)
         }
     }
 }

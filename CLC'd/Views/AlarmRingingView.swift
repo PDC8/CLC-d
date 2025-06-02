@@ -8,6 +8,7 @@ import SwiftUI
 
 struct AlarmRingingView: View {
     @EnvironmentObject var viewModel: AlarmViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -22,6 +23,12 @@ struct AlarmRingingView: View {
                 checkSubmission()
             }
             .buttonStyle(.borderedProminent)
+            
+            if let message = viewModel.failureMessage {
+                Text(message)
+                    .foregroundColor(.red)
+                    .padding()
+            }
         }
         .padding()
         .interactiveDismissDisabled()
@@ -30,14 +37,24 @@ struct AlarmRingingView: View {
     private func checkSubmission() {
         guard let alarm = viewModel.activeAlarm else { return }
         
-        viewModel.checkLatestSubmission(username: "peidongchen2004", alarmTime: alarm.time){ [weak viewModel] success in
-            if success {
-                AudioManager.shared.stopSound()
-                viewModel?.activeAlarm = nil
-                dismiss()
-            } else {
-                print("Not valid")
+        let calendar = Calendar.current
+        let now = Date()
+        var components = calendar.dateComponents([.year, .month, .day], from: now)
+        components.hour = alarm.hour
+        components.minute = alarm.minute
+        
+        if let alarmTime = calendar.date(from: components) {
+            viewModel.checkLatestSubmission(username: userViewModel.username, alarmTime: alarmTime) { [weak viewModel] success in
+                if success {
+                    AudioManager.shared.stopSound()
+                    viewModel?.activeAlarm = nil
+                    dismiss()
+                } else {
+                    print("Not valid")
+                }
             }
+        } else {
+            print("Failed to construct alarm time.")
         }
     }
 

@@ -10,9 +10,10 @@ import SwiftUI
 struct AlarmListView: View {
     @EnvironmentObject var viewModel: AlarmViewModel
     @State private var showingAddAlarm = false
+    @State private var showingProfile = false
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(viewModel.alarms) { alarm in
                     AlarmRow(alarm: alarm)
@@ -21,12 +22,26 @@ struct AlarmListView: View {
             }
             .navigationTitle("Alarms")
             .toolbar {
-                Button(action: {
-                    showingAddAlarm = true
-                }) {
-                    Image(systemName: "plus")
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        showingProfile = true
+                    }) {
+                        Image(systemName: "person.circle")
+                            .imageScale(.large)
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        showingAddAlarm = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
                 }
             }
+            .navigationDestination(isPresented: $showingProfile) {
+                ProfileView()
+            }
+            
             .sheet(isPresented: $showingAddAlarm) {
                 AddAlarmView()
             }
@@ -59,7 +74,8 @@ struct AlarmRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(alarm.time.formatted(date: .omitted, time: .shortened))
+                Text(formattedTime(hour: alarm.hour, minute: alarm.minute))
+                .font(.headline)
                 Text(alarm.problemType.rawValue)
                     .font(.caption)
                     .foregroundColor(.secondary)
@@ -70,5 +86,13 @@ struct AlarmRow: View {
             Toggle("", isOn: $alarm.isOn)
                 .labelsHidden()
         }
+    }
+    private func formattedTime(hour: Int, minute: Int) -> String {
+        var components = DateComponents()
+        components.hour = hour
+        components.minute = minute
+        let calendar = Calendar.current
+        let date = calendar.date(from: components) ?? Date()
+        return date.formatted(date: .omitted, time: .shortened)
     }
 }

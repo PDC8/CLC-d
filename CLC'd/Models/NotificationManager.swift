@@ -20,13 +20,13 @@ class NotificationManager {
         content.body = "Solve a problem to dismiss"
         content.sound = .default
         
-        let components = Calendar.current.dateComponents(
-            [.hour, .minute],
-            from: alarm.time
-        )
+        var dateComponents = DateComponents()
+        dateComponents.hour = alarm.hour
+        dateComponents.minute = alarm.minute
+
         
         let trigger = UNCalendarNotificationTrigger(
-            dateMatching: components,
+            dateMatching: dateComponents,
             repeats: false
         )
 

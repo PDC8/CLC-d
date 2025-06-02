@@ -148,8 +148,32 @@ class LeetCodeAPI {
         }
     }
     
+    func isValidUser(username: String, completion: @escaping (Bool) -> Void) {
+        let query = """
+            query getUserProfile($username: String!) { 
+                matchedUser(username: $username) { 
+                    username 
+                } 
+            }
+            """
+        let variables: [String: Any] = [
+            "username": username
+        ]
+        let body: [String: Any] = ["query": query, "variables": variables]
+        
+        self.performRequest(body: body) { json in
+            if let dataDict = json["data"] as? [String: Any],
+               let matchedUser = dataDict["matchedUser"] as? [String: Any] {
+                // If matchedUser is not nil, username is valid
+                completion(true)
+            } else {
+                // matchedUser is nil -> username is invalid
+                completion(false)
+            }
+        }
+    }
     
-    func checkLatestSubmission(username: String, alarmTime: Date, activeAlarm: Alarm?, completion: @escaping (Bool) -> Void) {
+    func checkLatestSubmission(username: String, alarmTime: Date, activeAlarm: Alarm?, completion: @escaping (Bool, String?) -> Void) {
         var validTime = false
         var validStatus = false
         var validTitle = false
@@ -187,9 +211,21 @@ class LeetCodeAPI {
                         validTitle = true
                     }
                 }
-                DispatchQueue.main.async {
-                    completion(validTime && validStatus && validTitle)
+                
+                let success = validTime && validStatus && validTitle
+                var reason: String? = nil
+
+                if !success {
+                    var reasons: [String] = []
+                    if !validTime { reasons.append("submission was too early") }
+                    if !validStatus { reasons.append("submission was not accepted") }
+                    if !validTitle { reasons.append("submitted the wrong problem") }
+                    reason = reasons.joined(separator: ", ")
                 }
+                DispatchQueue.main.async {
+                    completion(success, reason)
+                }
+                
             } else {
                 print("Something went wrong decoding the JSON.")
                 return
