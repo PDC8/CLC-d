@@ -9,8 +9,13 @@ import SwiftUI
 
 struct AlarmListView: View {
     @EnvironmentObject var viewModel: AlarmViewModel
+    @EnvironmentObject var userViewModel: UserViewModel
     @State private var showingAddAlarm = false
     @State private var showingProfile = false
+//    @State private var setProfile = false
+    private var setProfile: Bool {
+        userViewModel.username.isEmpty
+    }
     
     var body: some View {
         NavigationStack {
@@ -46,6 +51,15 @@ struct AlarmListView: View {
                 AddAlarmView()
             }
             
+            .fullScreenCover(isPresented: .constant(setProfile)) {
+                ProfileView()
+            }
+//            .onAppear {
+//                if userViewModel.username.isEmpty {
+//                    setProfile = true
+//                }
+//            }
+            
             .sheet(
                 item: Binding<Alarm?>(
                     get: {
@@ -80,6 +94,8 @@ struct AlarmRow: View {
                     .font(.caption)
                     .foregroundColor(.secondary)
                 Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
+                    .foregroundColor(.gray)
+                Text(alarm.repeatDays.isEmpty ? "Never" : alarm.repeatDays.description)
                     .foregroundColor(.gray)
             }
             Spacer()

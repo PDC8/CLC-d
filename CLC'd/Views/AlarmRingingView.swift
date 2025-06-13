@@ -47,6 +47,9 @@ struct AlarmRingingView: View {
             viewModel.checkLatestSubmission(username: userViewModel.username, alarmTime: alarmTime) { [weak viewModel] success in
                 if success {
                     AudioManager.shared.stopSound()
+                    if let currAlarm = viewModel?.activeAlarm, currAlarm.repeatDays.isEmpty {
+                        currAlarm.isOn = false
+                    }
                     viewModel?.activeAlarm = nil
                     dismiss()
                 } else {

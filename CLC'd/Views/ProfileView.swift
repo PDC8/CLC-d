@@ -46,6 +46,7 @@ struct ProfileView: View {
         .padding()
     }
     
+
     private func shakeAnimation() {
         let shakeDistance: CGFloat = 10
         let shakeTimes = 3
@@ -59,6 +60,7 @@ struct ProfileView: View {
             }
         }
         
+        // Reset after shaking
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(shakeTimes * 2) * shakeDuration) {
             withAnimation {
                 shake = 0

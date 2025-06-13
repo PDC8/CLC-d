@@ -18,8 +18,8 @@ class AlarmViewModel: ObservableObject {
         startTimer()
     }
 
-    func addAlarm(hour: Int, minute: Int, label: String, problemType: ProblemType) {
-        let newAlarm = Alarm(hour: hour, minute: minute, label: label, problemType: problemType, isOn: true)
+    func addAlarm(hour: Int, minute: Int, label: String, problemType: ProblemType, repeatDays: Set<Days>) {
+        let newAlarm = Alarm(hour: hour, minute: minute, label: label, problemType: problemType, isOn: true, repeatDays: repeatDays)
         alarms.append(newAlarm)
         NotificationManager.scheduleNotification(for: newAlarm)
     }
@@ -46,9 +46,12 @@ class AlarmViewModel: ObservableObject {
         let now = Date()
         let currentHour = calendar.component(.hour, from: now)
         let currentMinute = calendar.component(.minute, from: now)
+        let currentSecond = calendar.component(.second, from: now)
         let currentWeekday = calendar.component(.weekday, from: now) - 1
-        for alarm in alarms where !alarm.isTriggered && alarm.isOn {
-            if alarm.hour == currentHour && alarm.minute == currentMinute {
+        let currentWeekdayEnum = Days(rawValue: currentWeekday)!
+        for alarm in alarms where alarm.isOn &&
+            (alarm.repeatDays.contains(currentWeekdayEnum) || alarm.repeatDays.isEmpty) {
+            if alarm.hour == currentHour && alarm.minute == currentMinute && currentSecond == 0{
                 switch alarm.problemType {
                 case .daily:
                     LeetCodeAPI.shared.getDailyQuestion { [weak self] title in
