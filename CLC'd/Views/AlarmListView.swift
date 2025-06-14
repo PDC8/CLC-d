@@ -12,7 +12,7 @@ struct AlarmListView: View {
     @EnvironmentObject var userViewModel: UserViewModel
     @State private var showingAddAlarm = false
     @State private var showingProfile = false
-//    @State private var setProfile = false
+    @State private var editAlarm: Alarm? = nil
     private var setProfile: Bool {
         userViewModel.username.isEmpty
     }
@@ -22,6 +22,10 @@ struct AlarmListView: View {
             List {
                 ForEach(viewModel.alarms) { alarm in
                     AlarmRow(alarm: alarm)
+                        .contentShape(Rectangle())
+                           .onTapGesture {
+                               editAlarm = alarm
+                           }
                 }
                 .onDelete(perform: viewModel.removeAlarm)
             }
@@ -48,7 +52,7 @@ struct AlarmListView: View {
             }
             
             .sheet(isPresented: $showingAddAlarm) {
-                AddAlarmView()
+                AlarmFormView()
             }
             
             .fullScreenCover(isPresented: .constant(setProfile)) {
@@ -59,6 +63,12 @@ struct AlarmListView: View {
 //                    setProfile = true
 //                }
 //            }
+            .sheet(item: $editAlarm) { alarm in
+                if let index = viewModel.alarms.firstIndex(where: { $0.id == alarm.id }) {
+                    AlarmFormView(existingAlarm: $viewModel.alarms[index])
+                }
+            }
+
             
             .sheet(
                 item: Binding<Alarm?>(
