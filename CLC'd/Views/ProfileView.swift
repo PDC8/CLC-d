@@ -16,6 +16,7 @@ struct ProfileView: View {
     var body: some View {
         VStack(spacing: 20) {
             TextField("Enter your username", text: $newUsername)
+                .autocapitalization(.none)
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 8)
@@ -40,6 +41,7 @@ struct ProfileView: View {
                 }
             }
             .buttonStyle(.borderedProminent)
+            .tint(.orange)
             
             Text("Current username: \(userViewModel.username)")
         }

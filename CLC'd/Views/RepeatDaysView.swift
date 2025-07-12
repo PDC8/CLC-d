@@ -23,6 +23,8 @@ struct RepeatDaysView: View {
             }
         }
         .navigationTitle("Repeat")
+        .environment(\.colorScheme, .dark)
+        .tint(.orange)
     }
 }
 
@@ -38,7 +40,7 @@ struct MultipleSelectionRow: View {
                 Spacer()
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .foregroundColor(.blue)
+                        .foregroundColor(.orange)
                 }
             }
         }

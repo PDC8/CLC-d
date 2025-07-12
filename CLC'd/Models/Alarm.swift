@@ -32,4 +32,3 @@ class Alarm: ObservableObject, Identifiable {
         self.repeatString = ""
     }
 }
-

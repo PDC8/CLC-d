@@ -37,25 +37,35 @@ struct AlarmFormView: View {
     
     var body: some View {
         NavigationView {
-            Form {
-                DatePicker("Alarm Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
-                Picker("Problem Type", selection: $selectedProblemType) {
-                    ForEach(ProblemType.allCases) { level in
-                        Text(level.rawValue).tag(level)
+            ZStack{
+                Color.black.ignoresSafeArea()
+                Form {
+                    DatePicker("Alarm Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                        .datePickerStyle(.wheel)
+                    
+                    Picker("Problem Type", selection: $selectedProblemType) {
+                        ForEach(ProblemType.allCases) { level in
+                            Text(level.rawValue).tag(level)
+                        }
                     }
-                }.pickerStyle(.menu)
-                TextField("Label", text: $label)
-                
-                NavigationLink(destination: RepeatDaysView(repeatDays: $repeatDays)) {
-                    HStack {
-                        Text("Repeat")
-                        Spacer()
-                        Text(repeatDays.description)
-                            .foregroundColor(.gray)
+                    .pickerStyle(.menu)
+                    .tint(.orange)
+                    TextField("Label", text: $label)
+                    
+                    NavigationLink(destination: RepeatDaysView(repeatDays: $repeatDays)) {
+                        HStack {
+                            Text("Repeat")
 
+                            Spacer()
+                            Text(repeatDays.description)
+
+                        }
                     }
                 }
+                .scrollContentBackground(.hidden)
+                .background(Color.clear)
             }
+            .environment(\.colorScheme, .dark)
             
             .navigationTitle(existingAlarm != nil ? "Edit Alarm" : "Add Alarm")
             .toolbar {
@@ -76,11 +86,13 @@ struct AlarmFormView: View {
                         }
                         dismiss()
                     }
+                    .foregroundColor(.orange)
                 }
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .foregroundColor(.orange)
                 }
             }
         }

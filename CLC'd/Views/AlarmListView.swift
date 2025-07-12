@@ -17,15 +17,19 @@ struct AlarmListView: View {
         userViewModel.username.isEmpty
     }
     
+    init(){
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+    }
+    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(viewModel.alarms) { alarm in
                     AlarmRow(alarm: alarm)
                         .contentShape(Rectangle())
-                           .onTapGesture {
-                               editAlarm = alarm
-                           }
+                        .onTapGesture {
+                            editAlarm = alarm
+                        }
                 }
                 .onDelete(perform: viewModel.removeAlarm)
             }
@@ -53,6 +57,7 @@ struct AlarmListView: View {
             
             .sheet(isPresented: $showingAddAlarm) {
                 AlarmFormView()
+                    .ignoresSafeArea()
             }
             
             .fullScreenCover(isPresented: .constant(setProfile)) {
@@ -87,8 +92,12 @@ struct AlarmListView: View {
                 )
             ) { alarm in
                 AlarmRingingView()
+                    .presentationBackground(Color.black)
+                    .environment(\.colorScheme, .dark)
             }
         }
+        .environment(\.colorScheme, .dark)
+        .tint(.orange)
     }
 }
 
@@ -99,14 +108,11 @@ struct AlarmRow: View {
         HStack {
             VStack(alignment: .leading) {
                 Text(formattedTime(hour: alarm.hour, minute: alarm.minute))
-                .font(.headline)
+                    .font(.headline)
                 Text(alarm.problemType.rawValue)
                     .font(.caption)
-                    .foregroundColor(.secondary)
                 Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
-                    .foregroundColor(.gray)
                 Text(alarm.repeatDays.isEmpty ? "Never" : alarm.repeatDays.description)
-                    .foregroundColor(.gray)
             }
             Spacer()
             Toggle("", isOn: $alarm.isOn)

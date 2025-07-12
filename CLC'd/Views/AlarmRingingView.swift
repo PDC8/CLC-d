@@ -13,10 +13,19 @@ struct AlarmRingingView: View {
     
     var body: some View {
         VStack(spacing: 20) {
+//            if let title = viewModel.activeAlarm?.title {
+//                Text("Solve: \(title)")
+//                    .font(.headline)
+//                    .padding()
+//            }
             if let title = viewModel.activeAlarm?.title {
-                Text("Solve: \(title)")
-                    .font(.headline)
-                    .padding()
+                let formattedTitle = title.replacingOccurrences(of: " ", with: "-").lowercased()
+                let urlString = "https://leetcode.com/problems/\(formattedTitle)/"
+                if let url = URL(string: urlString) {
+                    Link("Solve: \(title)", destination: url)
+                        .font(.headline)
+                        .padding()
+                }
             }
             Text("🔔 Alarm! Solve to dismiss").font(.title)
             Button("Submit") {
@@ -30,8 +39,8 @@ struct AlarmRingingView: View {
                     .padding()
             }
         }
-        .padding()
         .interactiveDismissDisabled()
+        .padding()
     }
     
     private func checkSubmission() {
