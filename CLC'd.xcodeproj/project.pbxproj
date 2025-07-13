@@ -35,6 +35,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F661A4A52E23289200ADFCD5 /* docs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = docs;
+			sourceTree = "<group>";
+		};
 		F66D404D2DD587C7001E744D /* CLC'd */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "CLC'd";
@@ -81,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				F66D40782DD58813001E744D /* .gitignore */,
+				F661A4A52E23289200ADFCD5 /* docs */,
 				F66D404D2DD587C7001E744D /* CLC'd */,
 				F66D405E2DD587C9001E744D /* CLC'dTests */,
 				F66D40682DD587C9001E744D /* CLC'dUITests */,
@@ -114,6 +120,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				F661A4A52E23289200ADFCD5 /* docs */,
 				F66D404D2DD587C7001E744D /* CLC'd */,
 			);
 			name = "CLC'd";
