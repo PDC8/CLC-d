@@ -38,10 +38,11 @@ struct AlarmFormView: View {
     var body: some View {
         NavigationView {
             ZStack{
-                Color.black.ignoresSafeArea()
                 Form {
-                    DatePicker("Alarm Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
                         .datePickerStyle(.wheel)
+                        .labelsHidden()
+                        .frame(maxWidth: .infinity, alignment: .center)
                     
                     Picker("Problem Type", selection: $selectedProblemType) {
                         ForEach(ProblemType.allCases) { level in

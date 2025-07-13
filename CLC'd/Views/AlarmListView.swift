@@ -53,29 +53,32 @@ struct AlarmListView: View {
             }
             .navigationDestination(isPresented: $showingProfile) {
                 ProfileView()
+                    .presentationBackground(Color.black)
             }
             
-            .sheet(isPresented: $showingAddAlarm) {
+            .fullScreenCover(isPresented: $showingAddAlarm) {
                 AlarmFormView()
-                    .ignoresSafeArea()
+                    .presentationBackground(Color.black)
             }
             
             .fullScreenCover(isPresented: .constant(setProfile)) {
                 ProfileView()
+                    .presentationBackground(Color.black)
             }
 //            .onAppear {
 //                if userViewModel.username.isEmpty {
 //                    setProfile = true
 //                }
 //            }
-            .sheet(item: $editAlarm) { alarm in
+            .fullScreenCover(item: $editAlarm) { alarm in
                 if let index = viewModel.alarms.firstIndex(where: { $0.id == alarm.id }) {
                     AlarmFormView(existingAlarm: $viewModel.alarms[index])
+                        .presentationBackground(Color.black)
                 }
             }
 
             
-            .sheet(
+            .fullScreenCover(
                 item: Binding<Alarm?>(
                     get: {
                         guard let alarm = viewModel.activeAlarm,

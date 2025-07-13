@@ -45,6 +45,7 @@ struct ProfileView: View {
             
             Text("Current username: \(userViewModel.username)")
         }
+        .environment(\.colorScheme, .dark)
         .padding()
     }
     
