@@ -114,8 +114,10 @@ struct AlarmRow: View {
                     .font(.headline)
                 Text(alarm.problemType.rawValue)
                     .font(.caption)
-                Text(alarm.label.isEmpty ? "Alarm" : alarm.label)
-                Text(alarm.repeatDays.isEmpty ? "Never" : alarm.repeatDays.description)
+                let label = alarm.label.isEmpty ? "Alarm" : alarm.label
+                let repeatDays = alarm.repeatDays.isEmpty ? "" : alarm.repeatDays.description
+                let combined = repeatDays.isEmpty ? label : "\(label), \(repeatDays)"
+                Text(combined)
             }
             Spacer()
             Toggle("", isOn: $alarm.isOn)

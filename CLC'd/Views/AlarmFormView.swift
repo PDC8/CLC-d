@@ -51,7 +51,7 @@ struct AlarmFormView: View {
                     }
                     .pickerStyle(.menu)
                     .tint(.orange)
-                    TextField("Label", text: $label)
+                    TextField("Alarm", text: $label)
                     
                     NavigationLink(destination: RepeatDaysView(repeatDays: $repeatDays)) {
                         HStack {

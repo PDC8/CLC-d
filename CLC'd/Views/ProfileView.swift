@@ -15,7 +15,7 @@ struct ProfileView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            TextField("Enter your username", text: $newUsername)
+            TextField("Enter your leetcode username", text: $newUsername)
                 .autocapitalization(.none)
                 .padding()
                 .background(
